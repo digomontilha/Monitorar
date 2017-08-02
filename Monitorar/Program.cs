@@ -14,8 +14,8 @@ namespace Monitorar
     {
         static void Main()
         {
-            Run.Log();
-            //Run.Log(new string[] { "C:\\LOG" });
+            //Run.Log();
+            Run.Log(new string[] { "C:\\LOG" });
 
         }
         

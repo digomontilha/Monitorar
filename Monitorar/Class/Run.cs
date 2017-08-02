@@ -13,10 +13,10 @@ namespace Monitorar
     {
 
 
-        public static void Log()
+        public static void Log(string[] args)
         {
 
-            string[] args = Environment.GetCommandLineArgs();
+            //string[] args = Environment.GetCommandLineArgs();
 
             // If a directory is not specified, exit program.
             if (args.Length != 2)
@@ -59,6 +59,8 @@ namespace Monitorar
             {
                 Upload("serve", "TheUserName", "ThePassword", @"C:\file.txt");
                 return;
+
+                
             }
 
 
