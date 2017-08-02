@@ -2,28 +2,28 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Permissions;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using Topshelf;
 
-namespace Monitorar
+namespace Monitorar.Class
 {
-
-    class Run
+    public class Run
     {
-
-
-        public static void Log()
+        public void Log()
         {
 
-            string[] args = Environment.GetCommandLineArgs();
+            //string[] args = Environment.GetCommandLineArgs();
+            string[] args;
+            args = new string[2];
+            args[0] = @"c\log";
 
             // If a directory is not specified, exit program.
             if (args.Length != 2)
             {
                 // Display the proper way to call the program.
-                Console.WriteLine("CMD: Monitorar.exe (directory)");
-                return;
+           Console.WriteLine( "CMD: Monitorar.exe(directory)");
             }
 
 
@@ -58,10 +58,9 @@ namespace Monitorar
             if (Horario_determinado == Horario_atual)
             {
                 Upload("serve", "TheUserName", "ThePassword", @"C:\file.txt");
-                return;
-
-                
             }
+
+            
 
 
         }
@@ -110,6 +109,42 @@ namespace Monitorar
             }
         }
 
-    }
+        private readonly CancellationTokenSource _cancellationTokenSource;
 
+        public Run()
+        {
+            _cancellationTokenSource = new CancellationTokenSource();
+            
+        }
+
+        public bool Stop(HostControl hostControl)
+        {
+            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Dispose();
+            return true;
+        }
+
+        public bool Start(HostControl hostControl)
+        {
+            Task.Run(() =>
+            {
+
+                while (true)
+                {
+                    //DateTime DataAtual = new DateTime();
+
+                    //if (DataAtual.Hour == 07 && DataAtual.Minute == 00)
+                    //{
+                    Log();
+                    //}
+
+                    Thread.Sleep(TimeSpan.FromMinutes(60));
+                }
+            }, _cancellationTokenSource.Token);
+            return true;
+        }
+
+
+
+    }
 }
